@@ -1,14 +1,280 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/dark_grey"
     tools:context=".ui.MusicDetailsFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
 
-</FrameLayout>
+    <TextView
+        android:id="@+id/tv_trackName_details"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:textColor="@color/white"
+        android:textSize="28sp"
+        android:textStyle="normal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/icon_play_details"
+        tools:text="Music Titel"
+
+        />
+
+    <TextView
+        android:id="@+id/tv_artistName_details"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="normal"
+        app:layout_constraintBottom_toTopOf="@id/Progress_musicTime"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_trackName_details"
+        tools:text="artist name"
+
+
+        />
+
+    <ImageButton
+        android:id="@+id/btn_share"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="20dp"
+        android:backgroundTint="@color/dark_grey"
+        android:scaleType="centerCrop"
+        android:src="@drawable/icon_share"
+        app:layout_constraintBottom_toTopOf="@id/Progress_musicTime"
+        app:layout_constraintStart_toStartOf="parent"
+
+        />
+
+    <ImageButton
+        android:id="@+id/btn_like"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="20dp"
+        android:backgroundTint="@color/dark_grey"
+        android:scaleType="centerCrop"
+        android:src="@drawable/icon_like"
+        app:layout_constraintBottom_toTopOf="@id/Progress_musicTime"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
+    <ImageView
+        android:id="@+id/img_music_details"
+        android:layout_width="380dp"
+        android:layout_height="330dp"
+        android:layout_marginBottom="150dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/bild"
+        />
+
+    <ImageButton
+        android:id="@+id/imgButton_back"
+        android:layout_width="40dp"
+        android:layout_height="30dp"
+        android:layout_margin="10dp"
+        android:background="@color/dark_grey"
+        android:scaleType="centerCrop"
+        android:src="@drawable/icon_back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/icon_sik_previous_details"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="15dp"
+        android:background="@color/dark_grey"
+        android:scaleType="centerCrop"
+        android:src="@drawable/icon_skip_previous_24"
+        app:layout_constraintEnd_toStartOf="@id/icon_replay_10s_details"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/img_music_details"
+
+
+        />
+
+
+    <ImageButton
+        android:id="@+id/icon_replay_10s_details"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="12dp"
+        android:backgroundTint="@color/dark_grey"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toStartOf="@id/icon_play_details"
+        app:layout_constraintStart_toEndOf="@id/icon_sik_previous_details"
+        app:layout_constraintTop_toBottomOf="@id/img_music_details"
+        tools:src="@drawable/icon_replay_10"
+
+        />
+
+
+    <ImageButton
+        android:id="@+id/icon_play_details"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:background="@color/dark_grey"
+        android:scaleType="centerCrop"
+        android:src="@drawable/icon_play"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/img_music_details" />
+
+    <ImageButton
+        android:id="@+id/icon_next_details"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="15dp"
+        android:background="@color/dark_grey"
+        android:scaleType="centerCrop"
+        android:src="@drawable/icon_skip_next_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/icon_forward_10s_details"
+        app:layout_constraintTop_toBottomOf="@id/img_music_details"
+
+        />
+
+
+    <ImageButton
+        android:id="@+id/icon_forward_10s_details"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="12dp"
+        android:backgroundTint="@color/dark_grey"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toStartOf="@id/icon_next_details"
+        app:layout_constraintStart_toEndOf="@id/icon_play_details"
+        app:layout_constraintTop_toBottomOf="@id/img_music_details"
+        tools:src="@drawable/icon_forward_10"
+
+        />
+
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/music_ControllBar_deatils"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="@color/dark_grey2"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+
+        >
+
+        <ImageView
+            android:id="@+id/img_tollbar_details"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:scaleType="centerCrop"
+            tools:src="@drawable/bild" />
+
+        <TextView
+            android:layout_width="130dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/white"
+            tools:text="Music Titel" />
+
+        <ImageButton
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="10dp"
+            android:background="@color/dark_grey2"
+            android:scaleType="centerCrop"
+            android:src="@drawable/icon_skip_previous_24" />
+
+        <ImageButton
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="30dp"
+            android:background="@color/dark_grey2"
+            android:scaleType="centerCrop"
+            android:src="@drawable/icon_play" />
+
+        <ImageButton
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="30dp"
+            android:background="@color/dark_grey2"
+            android:scaleType="centerCrop"
+            android:src="@drawable/icon_skip_next_24" />
+
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <ProgressBar
+        android:id="@+id/Progress_musicTime"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="300dp"
+        android:layout_height="10dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@id/music_ControllBar_deatils"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteX="173dp"
+        tools:layout_editor_absoluteY="647dp"
+        android:progressDrawable="@drawable/cutom_progress"/>
+
+    <TextView
+        android:id="@+id/music_time_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="4:00"
+        android:textColor="@color/white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/Progress_musicTime"
+        app:layout_constraintBottom_toTopOf="@id/music_ControllBar_deatils"
+        />
+
+    <TextView
+        android:id="@+id/music_time_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="5:00"
+        android:textColor="@color/white"
+        app:layout_constraintStart_toEndOf="@id/Progress_musicTime"
+        app:layout_constraintBottom_toTopOf="@id/music_ControllBar_deatils"
+        app:layout_constraintEnd_toEndOf="parent"
+
+        />
+
+    <ImageButton
+        android:id="@+id/btn_volume"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/img_music_details"
+        android:src="@drawable/volume_up"
+        android:scaleType="centerCrop"
+        android:background="@color/tranparent"/>
+
+
+    <ProgressBar
+        android:id="@+id/Progress_volume"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="20dp"
+        android:layout_height="200dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/btn_volume"
+        app:layout_constraintEnd_toEndOf="@id/btn_volume"
+        app:layout_constraintStart_toStartOf="@id/btn_volume"
+
+        android:progressDrawable="@drawable/cutom_progress"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
