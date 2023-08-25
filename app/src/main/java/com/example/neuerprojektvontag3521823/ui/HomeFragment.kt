@@ -36,7 +36,6 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.loadMusik()
         val adapter = HomeItemAdapter(viewModel.musicList, viewModel)
         binding.recyclerView.adapter = adapter
         addObserve()
@@ -48,7 +47,7 @@ class HomeFragment : Fragment() {
     private fun addObserve() {
         viewModel.music.observe(viewLifecycleOwner, Observer {
 
-            viewModel.loadMusik()
+
 
 
         })

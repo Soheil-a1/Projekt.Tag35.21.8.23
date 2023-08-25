@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:id="@+id/_music_control_card"
+    android:visibility="visible"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    >
+
+
+
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/music_ControllBar_deatils"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:background="@color/dark_grey2"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+
+            >
+
+
+            <ImageView
+                android:id="@+id/img_tollbar_details"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:scaleType="centerCrop"
+                tools:src="@drawable/bild" />
+
+            <TextView
+                android:layout_width="130dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:textColor="@color/white"
+                tools:text="Music Titel" />
+
+            <ImageButton
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="10dp"
+                android:background="@color/dark_grey2"
+                android:scaleType="centerCrop"
+                android:src="@drawable/icon_skip_previous_24" />
+
+            <ImageButton
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="30dp"
+                android:background="@color/dark_grey2"
+                android:scaleType="centerCrop"
+                android:src="@drawable/icon_play" />
+
+            <ImageButton
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="30dp"
+                android:background="@color/dark_grey2"
+                android:scaleType="centerCrop"
+                android:src="@drawable/icon_skip_next_24" />
+
+
+        </androidx.appcompat.widget.Toolbar>
+
+        <ProgressBar
+            android:id="@+id/Progress_musicTime"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="300dp"
+            android:layout_height="5dp"
+            android:visibility="visible"
+            app:layout_constraintBottom_toTopOf="@id/music_ControllBar_deatils"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:layout_editor_absoluteX="173dp"
+            tools:layout_editor_absoluteY="647dp"
+            android:progressDrawable="@drawable/cutom_progress"/>
+
+        <TextView
+            android:id="@+id/music_time_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="4:00"
+            android:textColor="@color/white"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/Progress_musicTime"
+            app:layout_constraintBottom_toTopOf="@id/music_ControllBar_deatils"
+            />
+
+        <TextView
+            android:id="@+id/music_time_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="5:00"
+            android:textColor="@color/white"
+            app:layout_constraintStart_toEndOf="@id/Progress_musicTime"
+            app:layout_constraintBottom_toTopOf="@id/music_ControllBar_deatils"
+            app:layout_constraintEnd_toEndOf="parent"
+
+            />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+

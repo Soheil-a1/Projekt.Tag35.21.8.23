@@ -6,19 +6,17 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import com.example.neuerprojektvontag3521823.MainActivity
-import com.example.neuerprojektvontag3521823.data.model.Music
+import com.example.neuerprojektvontag3521823.databinding.BottomMusicControllItemBinding
 import com.example.neuerprojektvontag3521823.databinding.FragmentMusicDetailsBinding
 
 
 class MusicDetailsFragment : Fragment() {
     private lateinit var binding: FragmentMusicDetailsBinding
+    private lateinit var musicCardBinding: BottomMusicControllItemBinding
     private val viewModel: MusicViewModel by activityViewModels()
 
 
@@ -43,10 +41,13 @@ class MusicDetailsFragment : Fragment() {
         viewModel.music.observe(viewLifecycleOwner, Observer {
             binding.tvTrackNameDetails.text = it.trackName
             binding.tvArtistNameDetails.text = it.artistsName
-            binding.imgMusicDetails.setImageResource(it.musicImg)
             binding.musicTimeEnd.setText(it.trackTime.toString())
             binding.musicTimeStart.setText(it.trackTimeSecond.toString())
             binding.ProgressMusicTime.setProgress(it.trackTimeSecond.toInt())
+
+            binding.iconForward10sDetails
+
+
         })
 
         if (viewModel.music.value?.liked == true) {
@@ -59,7 +60,7 @@ class MusicDetailsFragment : Fragment() {
         }
 
 
-        binding.musicControllBarDeatils
+
 
         binding.iconReplay10sDetails.setOnClickListener {
             // musicInstance.trackTimeSecond.minus(10)
@@ -110,18 +111,17 @@ class MusicDetailsFragment : Fragment() {
 
     fun musicPlay() {
         binding.iconPlayDetails.setOnClickListener {
-            binding.musicControllBarDeatils.visibility = View.VISIBLE
-            binding.ProgressMusicTime.visibility = View.VISIBLE
-
-
-
 
             if (binding.iconPlayDetails.tag == "Pause") {
                 binding.iconPlayDetails.setImageResource(com.example.neuerprojektvontag3521823.R.drawable.icon_play)
+                binding.iconPlayDetails.tag = "Start"
+              //  musicCardBinding.musicControlCard.visibility = View.VISIBLE
 
             } else {
                 binding.iconPlayDetails.setImageResource(com.example.neuerprojektvontag3521823.R.drawable.icon_pause)
                 binding.iconPlayDetails.tag = "Pause"
+             //   musicCardBinding.musicControlCard.visibility = View.GONE
+
             }
         }
     }

@@ -33,7 +33,6 @@ class HomeItemAdapter(private val dataset: List<Music>, val viewModel: MusicView
         val itemes = dataset[position]
 
 
-        holder.binding.imgItemViewCard.setImageResource(itemes.musicImg)
         holder.binding.itemCardViewText.text = itemes.trackName
         holder.binding.itemCardView.setOnClickListener {
             viewModel.setCurrentMusic(itemes)

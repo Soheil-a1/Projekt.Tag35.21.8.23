@@ -9,11 +9,12 @@ data class Music (
     @Json(name = "artworkUrl100") var artworkUrl100: String,
     @Json(name = "trackTime") var trackTime: Int = 0,
     @Json(name = "kind") var kind: String,
-    @Json(name = "musicImg") var musicImg: Int
 
 ){
     val trackTimeSecond : Double = (trackTime / 1000).toDouble()
     var liked: Boolean = false
+    val forward10S: Int = 0
+    val replay10S: Int= 0
 
 
 

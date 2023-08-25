@@ -28,7 +28,6 @@ class LibraryItemAdapter (val dataset : List<Music>): RecyclerView.Adapter<Libra
 
     override fun onBindViewHolder(holder: LibraryViewHolder, position: Int) {
         val itemes = dataset[position]
-        holder.binding.imgItemViewCard.setImageResource(itemes.musicImg)
         holder.binding.itemCvTrackName.text = itemes.trackName
         holder.binding.iCvArtistName.text = itemes.artistsName
 

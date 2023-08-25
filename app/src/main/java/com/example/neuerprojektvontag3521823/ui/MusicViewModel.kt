@@ -8,25 +8,29 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.neuerprojektvontag3521823.data.Repository
 import com.example.neuerprojektvontag3521823.data.model.Music
+import com.example.neuerprojektvontag3521823.data.remote.MusicApi
 import com.example.neuerprojektvontag3521823.data.remote.MusicApiService
 import kotlinx.coroutines.launch
 
 
 class MusicViewModel : ViewModel() {
 
-    private val repository = Repository()
+    private val repository = Repository(MusicApi)
 
     val musicList = repository.loadData()
     private val _music = MutableLiveData<Music>()
     val listOfMusic = mutableListOf<Music>()
 
+
     val music: LiveData<Music>
         get() = _music
 
+    val searchResults = repository.results
 
-    fun loadMusik() {
+
+    fun loadMusik(term: String) {
         viewModelScope.launch {
-            musicList
+            repository.getMusic(term = term)
         }
     }
 
