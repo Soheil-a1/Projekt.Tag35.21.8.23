@@ -12,14 +12,21 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.SnapHelper
 import com.example.neuerprojektvontag3521823.adapter.HomeItemAdapter
+import com.example.neuerprojektvontag3521823.adapter.MusicSearchAdapter
 import com.example.neuerprojektvontag3521823.data.Repository
 import com.example.neuerprojektvontag3521823.databinding.FragmentHomeBinding
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
     private val viewModel: MusicViewModel by activityViewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        GlobalScope.launch {
+            viewModel.currentMusic
+        }
 
     }
 
@@ -31,26 +38,26 @@ class HomeFragment : Fragment() {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
 
+
+
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val adapter = HomeItemAdapter(viewModel.musicList, viewModel)
+        val adapter = HomeItemAdapter(viewModel.listOfMusic, viewModel)
         binding.recyclerView.adapter = adapter
-        addObserve()
+        viewModel.getGenre()
+        addObserver()
 
-        val helper: SnapHelper = PagerSnapHelper()
-        helper.attachToRecyclerView(binding.recyclerView)
     }
-
-    private fun addObserve() {
-        viewModel.music.observe(viewLifecycleOwner, Observer {
-
-
-
-
+    private fun addObserver(){
+        viewModel.musicList.observe(viewLifecycleOwner, Observer {
+            binding.recyclerView.adapter = HomeItemAdapter(it,viewModel)
         })
+
+
+
     }
 }
 

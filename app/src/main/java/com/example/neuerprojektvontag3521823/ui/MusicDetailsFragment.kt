@@ -1,28 +1,26 @@
 package com.example.neuerprojektvontag3521823.ui
 
-import android.R
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import com.example.neuerprojektvontag3521823.databinding.BottomMusicControllItemBinding
+import coil.load
+import coil.transform.RoundedCornersTransformation
 import com.example.neuerprojektvontag3521823.databinding.FragmentMusicDetailsBinding
 
 
 class MusicDetailsFragment : Fragment() {
     private lateinit var binding: FragmentMusicDetailsBinding
-    private lateinit var musicCardBinding: BottomMusicControllItemBinding
     private val viewModel: MusicViewModel by activityViewModels()
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
 
     override fun onCreateView(
@@ -39,15 +37,21 @@ class MusicDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.music.observe(viewLifecycleOwner, Observer {
+            val imgUri = it.artworkUrl100.toUri().buildUpon().scheme("https").build()
+
             binding.tvTrackNameDetails.text = it.trackName
             binding.tvArtistNameDetails.text = it.artistsName
             binding.musicTimeEnd.setText(it.trackTime.toString())
             binding.musicTimeStart.setText(it.trackTimeSecond.toString())
             binding.ProgressMusicTime.setProgress(it.trackTimeSecond.toInt())
-
             binding.iconForward10sDetails
 
-
+            binding.imgMusicDetails.load(imgUri) {
+                // error(R.drawable.)
+                transformations(
+                    RoundedCornersTransformation(10f)
+                )
+            }
         })
 
         if (viewModel.music.value?.liked == true) {
@@ -59,9 +63,6 @@ class MusicDetailsFragment : Fragment() {
             viewModel.removeMusic()
         }
 
-
-
-
         binding.iconReplay10sDetails.setOnClickListener {
             // musicInstance.trackTimeSecond.minus(10)
         }
@@ -70,20 +71,16 @@ class MusicDetailsFragment : Fragment() {
             //  musicInstance.trackTimeSecond.plus(10)
         }
 
-
-
         binding.btnShare.setOnClickListener {
             viewModel.shareMusic(requireContext())
         }
 
-
         binding.btnLike.setOnClickListener {
             viewModel.onToggleMusicLike()
-            Log.e("Disliked",  "${viewModel.music.value?.liked}")
+            Log.e("Disliked", "${viewModel.music.value?.liked}")
             if (viewModel.music.value?.liked == true) {
                 binding.btnLike.setImageResource(com.example.neuerprojektvontag3521823.R.drawable.icon_liked)
                 viewModel.saveMusic()
-
             } else {
                 binding.btnLike.setImageResource(com.example.neuerprojektvontag3521823.R.drawable.icon_like)
                 viewModel.removeMusic()
@@ -115,12 +112,13 @@ class MusicDetailsFragment : Fragment() {
             if (binding.iconPlayDetails.tag == "Pause") {
                 binding.iconPlayDetails.setImageResource(com.example.neuerprojektvontag3521823.R.drawable.icon_play)
                 binding.iconPlayDetails.tag = "Start"
-              //  musicCardBinding.musicControlCard.visibility = View.VISIBLE
+                //  musicCardBinding.musicControlCard.visibility = View.VISIBLE
+                viewModel.playSong()
 
             } else {
                 binding.iconPlayDetails.setImageResource(com.example.neuerprojektvontag3521823.R.drawable.icon_pause)
                 binding.iconPlayDetails.tag = "Pause"
-             //   musicCardBinding.musicControlCard.visibility = View.GONE
+                //   musicCardBinding.musicControlCard.visibility = View.GONE
 
             }
         }
@@ -128,3 +126,5 @@ class MusicDetailsFragment : Fragment() {
 
 
 }
+
+

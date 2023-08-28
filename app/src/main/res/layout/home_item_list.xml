@@ -22,7 +22,7 @@
 
 
         <ImageView
-            android:id="@+id/img_item_viewCard"
+            android:id="@+id/img_viewCard"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginBottom="30dp"

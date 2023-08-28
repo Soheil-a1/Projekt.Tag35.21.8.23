@@ -2,10 +2,12 @@ package com.example.neuerprojektvontag3521823.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.net.toUri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.example.neuerprojektvontag3521823.data.model.Music
 import com.example.neuerprojektvontag3521823.databinding.HomeItemListBinding
 import com.example.neuerprojektvontag3521823.ui.HomeFragmentDirections
@@ -31,9 +33,12 @@ class HomeItemAdapter(private val dataset: List<Music>, val viewModel: MusicView
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val itemes = dataset[position]
+        val imgUri = itemes.artworkUrl100.toUri().buildUpon().scheme("https").build()
 
 
         holder.binding.itemCardViewText.text = itemes.trackName
+        holder.binding.imgViewCard.load(imgUri)
+
         holder.binding.itemCardView.setOnClickListener {
             viewModel.setCurrentMusic(itemes)
             val navController = holder.itemView.findNavController()
