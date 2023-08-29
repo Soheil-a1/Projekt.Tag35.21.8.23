@@ -18,10 +18,8 @@ private val moshi = Moshi.Builder()
     .add(KotlinJsonAdapterFactory())
     .build()
 
-private val _musicList =  MutableLiveData<List<Music>>()
 
-val imgList: LiveData<List<Music>>
-     get() = _musicList
+
 
 
 private val retrofit= Retrofit.Builder()
@@ -34,7 +32,7 @@ interface MusicApiService{
     @GET("search")
 
     suspend fun getMusic(@Query("term") music: String, @Query("media") media: String = "music"): SearchResult
-    @GET("Search")
+    @GET("search")
     suspend fun getMusicHome(@Query("term") music: String,@Query("media")entity: String = "music",@Query ("genreId") genreId :String): SearchResult
 }
 

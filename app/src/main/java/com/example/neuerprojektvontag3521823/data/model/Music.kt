@@ -15,6 +15,10 @@ data class Music (
     var liked: Boolean = false
     val forward10S: Int = 0
     val replay10S: Int= 0
+    val musicPreview = 30
+    val musicTimeStart: Int = 0
+
+    val musicTimeEnd: Int = 0
 
 
 

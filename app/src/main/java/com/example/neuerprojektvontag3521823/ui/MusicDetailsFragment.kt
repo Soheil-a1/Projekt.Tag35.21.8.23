@@ -47,7 +47,6 @@ class MusicDetailsFragment : Fragment() {
             binding.iconForward10sDetails
 
             binding.imgMusicDetails.load(imgUri) {
-                // error(R.drawable.)
                 transformations(
                     RoundedCornersTransformation(10f)
                 )
@@ -107,21 +106,19 @@ class MusicDetailsFragment : Fragment() {
 
 
     fun musicPlay() {
-        binding.iconPlayDetails.setOnClickListener {
+
 
             if (binding.iconPlayDetails.tag == "Pause") {
                 binding.iconPlayDetails.setImageResource(com.example.neuerprojektvontag3521823.R.drawable.icon_play)
                 binding.iconPlayDetails.tag = "Start"
-                //  musicCardBinding.musicControlCard.visibility = View.VISIBLE
                 viewModel.playSong()
 
             } else {
                 binding.iconPlayDetails.setImageResource(com.example.neuerprojektvontag3521823.R.drawable.icon_pause)
                 binding.iconPlayDetails.tag = "Pause"
-                //   musicCardBinding.musicControlCard.visibility = View.GONE
 
             }
-        }
+
     }
 
 

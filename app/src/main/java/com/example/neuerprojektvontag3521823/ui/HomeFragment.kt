@@ -24,9 +24,7 @@ class HomeFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        GlobalScope.launch {
-            viewModel.currentMusic
-        }
+
 
     }
 
@@ -45,15 +43,16 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val adapter = HomeItemAdapter(viewModel.listOfMusic, viewModel)
-        binding.recyclerView.adapter = adapter
+
         viewModel.getGenre()
         addObserver()
 
     }
     private fun addObserver(){
-        viewModel.musicList.observe(viewLifecycleOwner, Observer {
+        viewModel.getMusic.observe(viewLifecycleOwner, Observer {
+
             binding.recyclerView.adapter = HomeItemAdapter(it,viewModel)
+            //viewModel.imgList.load(it.artworkUrl100)
         })
 
 

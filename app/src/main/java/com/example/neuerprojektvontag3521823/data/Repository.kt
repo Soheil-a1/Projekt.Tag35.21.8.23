@@ -3,24 +3,24 @@ package com.example.neuerprojektvontag3521823.data
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.neuerprojektvontag3521823.R
 import com.example.neuerprojektvontag3521823.data.model.Music
 import com.example.neuerprojektvontag3521823.data.remote.MusicApi
-import com.example.neuerprojektvontag3521823.data.remote.MusicApiService
 import kotlinx.coroutines.delay
 import java.lang.Exception
 
 class Repository(val api: MusicApi) {
 
     private val _results = MutableLiveData<List<Music>>()
-
     val results: LiveData<List<Music>>
         get() = _results
 
-    private val _getMusic = MutableLiveData<List<Music>>()
 
+    private val _getMusic = MutableLiveData<List<Music>>()
     val getMusic: LiveData<List<Music>>
         get() = _getMusic
+
+
+
 
     suspend fun getMusic(term: String) {
         delay(2000)

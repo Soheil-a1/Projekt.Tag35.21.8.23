@@ -7,7 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import coil.load
 import com.example.neuerprojektvontag3521823.databinding.FragmentBottomControllBinding
+import java.util.concurrent.TimeUnit
 
 
 class BottomControllFragment : Fragment() {
@@ -49,13 +51,29 @@ class BottomControllFragment : Fragment() {
 
         viewModel.currentMusic.observe(viewLifecycleOwner, Observer {
             binding.musicTitel.text = it.trackName
+            binding.imgTollbar.load(it.artworkUrl100)
+            binding.ProgressMusicTime.max = it.musicPreview
+            binding.musicTimeStart.setText(it.musicTimeStart)
+            binding.musicTimeEnd.setText(it.musicTimeEnd)
+            binding.iconPlay.setOnClickListener {
+                viewModel.playSong()
+            }
 
         })
 
         viewModel.currentMusicTime.observe(viewLifecycleOwner, Observer {
             binding.ProgressMusicTime.progress = it / 1000
+            binding.musicTimeStart.text = (transform(it.toLong()))
+            binding.musicTimeEnd.text = (transform(it.toLong().downTo(0).last))
+
         })
 
 
+    }
+
+    private fun transform(milSek: Long): String {
+        val min = TimeUnit.MILLISECONDS.toMinutes(milSek)
+        val sec = TimeUnit.MILLISECONDS.toSeconds(milSek) % 60
+        return String.format("%02d:%02d", min, sec)
     }
 }

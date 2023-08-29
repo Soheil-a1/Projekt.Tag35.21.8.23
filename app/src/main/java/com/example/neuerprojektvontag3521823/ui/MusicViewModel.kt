@@ -55,10 +55,19 @@ class MusicViewModel : ViewModel() {
     val currentMusicTime: LiveData<Int>
         get() = _currentMusicTime
 
+val getMusic = repository.getMusic
+
+    private val _imgList =  MutableLiveData<List<Music>>()
+    val imgList: LiveData<List<Music>>
+        get() = _imgList
+
+
 
     fun loadMusik(term: String) {
         viewModelScope.launch {
             repository.getMusic(term = term)
+            imgList
+
         }
     }
 
@@ -105,7 +114,7 @@ class MusicViewModel : ViewModel() {
         _genre.value = term
         val id: String = genreMap[term]!!
         viewModelScope.launch {
-            repository.getSongGenre("term", id)
+            repository.getSongGenre(term, id)
         }
     }
 
@@ -150,6 +159,7 @@ class MusicViewModel : ViewModel() {
 
 
     fun playSong() {
+
         _currentMusic.value = _selectedMusic.value
         if (_playerStatus.value == MediaStatus.PLAYING) {
             mediaPlayer.reset()
