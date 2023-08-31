@@ -1,12 +1,11 @@
 package com.example.neuerprojektvontag3521823.ui
 
-import android.content.ContentValues.TAG
+import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.neuerprojektvontag3521823.data.Repository
 import com.example.neuerprojektvontag3521823.data.model.Music
@@ -14,29 +13,27 @@ import com.example.neuerprojektvontag3521823.data.remote.MusicApi
 import kotlinx.coroutines.launch
 import android.media.MediaPlayer
 import android.media.MediaPlayer.OnPreparedListener
-import com.example.neuerprojektvontag3521823.data.model.SearchResult
-import java.util.logging.Handler
-
+import androidx.lifecycle.AndroidViewModel
+import com.example.neuerprojektvontag3521823.data.logal.MusicDataBase.Companion.getDataBase
 
 enum class MediaStatus { LOADING, READY, PLAYING, FINISHED }
 
-class MusicViewModel : ViewModel() {
+class MusicViewModel(application: Application) : AndroidViewModel(application) {
+    private val TAG = "MusicViewModel"
+    private val database = getDataBase(application)
 
-    private val repository = Repository(MusicApi)
+    val repository = Repository(MusicApi, database)
     val musicList = repository.results
     val listOfMusic = mutableListOf<Music>()
     var mediaPlayer: MediaPlayer = MediaPlayer()
+    val librarySongs = repository.libraryMusic
 
-    private val _currentMusic = MutableLiveData<Music>()
-    val currentMusic: LiveData<Music>
-        get() = _currentMusic
-
-
+    // ausgewählte music für DetailsFragment
     private val _music = MutableLiveData<Music>()
     val music: LiveData<Music>
         get() = _music
 
-
+    // ausgewählte musik für player
     private val _selectedMusic = MutableLiveData<Music>()
     val selctedMusic: LiveData<Music>
         get() = _selectedMusic
@@ -44,7 +41,6 @@ class MusicViewModel : ViewModel() {
     val searchResults = repository.results
     private val _genre = MutableLiveData("")
     val genre: LiveData<String> get() = _genre
-
 
     private val _playerStatus = MutableLiveData<MediaStatus>()
     val playerStatus: LiveData<MediaStatus>
@@ -55,24 +51,27 @@ class MusicViewModel : ViewModel() {
     val currentMusicTime: LiveData<Int>
         get() = _currentMusicTime
 
-val getMusic = repository.getMusic
+    val getMusic = repository.getMusic
 
-    private val _imgList =  MutableLiveData<List<Music>>()
+    private val _imgList = MutableLiveData<List<Music>>()
     val imgList: LiveData<List<Music>>
         get() = _imgList
-
 
 
     fun loadMusik(term: String) {
         viewModelScope.launch {
             repository.getMusic(term = term)
             imgList
-
         }
     }
 
     fun setCurrentMusic(music: Music) {
         _music.value = music
+    }
+
+    fun open(artist: Music) {
+        _music.value = artist
+        Log.d("Open", "Current : ${_music.value}  $this")
     }
 
     fun shareMusic(context: Context) {
@@ -83,31 +82,56 @@ val getMusic = repository.getMusic
         context.startActivity(chooserIntent)
     }
 
-    fun onToggleMusicLike(): Boolean {// muss erst erfahren, ob der Song bereit gelikt oder nicht, dann entweder als true oder false speichern, danach als Rückgabe
-        //Boolean schreiben,Boolean sagt uns, ob der Musik bereit gelike  ist oder nicht, und als return, dann man in DetailsFragment benutzen kann, um das Herz als Grün oder nicht grün markieren.
-
-        _music.value?.let {
-            it.liked = !it.liked
+    fun onToggleMusicLike(): Boolean {
+        val music = _music.value
+        if (music != null) {
+            music.liked = !music.liked
+            return music.liked
         }
-        return _music.value!!.liked
+        return false
     }
+
+    /*  fun onToggleMusicLike(): Boolean {// muss erst erfahren, ob der Song bereit gelikt oder nicht, dann entweder als true oder false speichern, danach als Rückgabe
+          Boolean schreiben,Boolean sagt uns, ob der Musik bereit gelike  ist oder nicht, und als return, dann man in DetailsFragment benutzen kann, um das Herz als Grün oder nicht grün markieren.
+
+          _music.value?.let {
+              it.liked = !it.liked
+          }
+          return _music.value!!.liked
+      }*/
 
 
     fun saveMusic() {
-        _music.value?.let { music ->
-            if (!listOfMusic.contains(music)) {
-                listOfMusic.add(music)
+        _music.value?.let {
+            viewModelScope.launch {
+                repository.insertMusicToLibrary(it)
             }
         }
     }
 
+    /*_music.value?.let { music ->
+        if (!listOfMusic.contains(music)) {
+            listOfMusic.add(music)
+        }
+    }*/
+
     fun removeMusic() {
+        _music.value?.let {
+            viewModelScope.launch {
+                repository.deleteSongFromLibrary(it.id)
+            }
+        }
+    }
+
+    /*fun removeMusic() {
         _music.value?.let { music ->
             if (listOfMusic.contains(music)) {
                 listOfMusic.remove(music)
             }
         }
     }
+
+     */
 
     fun getGenre() {
         val term: String = genreMap.keys.random()
@@ -116,11 +140,6 @@ val getMusic = repository.getMusic
         viewModelScope.launch {
             repository.getSongGenre(term, id)
         }
-    }
-
-    fun open(artist: Music) {
-        _music.value = artist
-        Log.d("Open", "Current : ${_music.value}  $this")
     }
 
 
@@ -137,9 +156,9 @@ val getMusic = repository.getMusic
         "Alternative" to "20"
     )
 
-    var updateSongTime = object : Runnable {
+    private var updateSongTime = object : Runnable {
         override fun run() {
-            _currentMusicTime.value = mediaPlayer?.currentPosition
+            _currentMusicTime.value = mediaPlayer.currentPosition
             android.os.Handler().postDelayed(this, 1000)
         }
     }
@@ -157,10 +176,8 @@ val getMusic = repository.getMusic
         }
     }
 
-
     fun playSong() {
-
-        _currentMusic.value = _selectedMusic.value
+        _selectedMusic.value = _music.value
         if (_playerStatus.value == MediaStatus.PLAYING) {
             mediaPlayer.reset()
             mediaPlayer = MediaPlayer()
@@ -170,19 +187,17 @@ val getMusic = repository.getMusic
         mediaPlayer.setDataSource(selctedMusic.value?.previewUrl)
         mediaPlayer.prepareAsync()
     }
+
+    fun playMusic() {
+        val music = _music.value
+        if (music != null) {
+            val uriString = music.artworkUrl100
+            val mediaPlayer = MediaPlayer()
+            mediaPlayer.setDataSource(uriString)
+        }
+    }
+
+    fun breakMusic() {
+        mediaPlayer.pause()
+    }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.SnapHelper
 import com.example.neuerprojektvontag3521823.R
 import com.example.neuerprojektvontag3521823.adapter.HomeItemAdapter
-import com.example.neuerprojektvontag3521823.adapter.LibraryItemAdapter
 import com.example.neuerprojektvontag3521823.adapter.MusicSearchAdapter
 import com.example.neuerprojektvontag3521823.databinding.FragmentSearchBinding
 
@@ -24,11 +23,8 @@ class SearchFragment : Fragment() {
     private val viewModel: MusicViewModel by activityViewModels()
 
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
 
     override fun onCreateView(
@@ -43,22 +39,10 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.inputText.addTextChangedListener {
-        viewModel.loadMusik(it.toString())
+            viewModel.loadMusik(it.toString())
         }
-
         viewModel.searchResults.observe(viewLifecycleOwner, Observer {
             binding.recyclerView.adapter = MusicSearchAdapter(it, viewModel)
         })
-
-
-
-
-
-
-
     }
-
-
-
-
 }

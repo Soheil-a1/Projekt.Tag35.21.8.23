@@ -6,24 +6,25 @@
         android:id="@+id/homeFragment"
         android:title="Home"
         android:icon="@drawable/home_icon_white"
-        android:iconTint="@color/white"
-
-
-        />
+        android:iconTint="@color/white">
+    </item>
 
     <item
         android:id="@+id/searchFragment"
         android:title="Search"
         android:icon="@drawable/search_icon_white"
-        android:iconTint="@color/white"
-        />
+        android:iconTint="@color/white" >
+
+    </item>
     <item
         android:id="@+id/libraryFragment"
         android:title="Library"
         android:icon="@drawable/library_icon_white"
         android:iconTint="@color/white"
 
-        />
+        >
+
+    </item>
 
 
 

@@ -3,8 +3,6 @@ package com.example.neuerprojektvontag3521823.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.net.toUri
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
@@ -15,7 +13,6 @@ import com.example.neuerprojektvontag3521823.ui.MusicViewModel
 
 class HomeItemAdapter(private val dataset: List<Music>, val viewModel: MusicViewModel) :
     RecyclerView.Adapter<HomeItemAdapter.MyViewHolder>() {
-
 
 
     inner class MyViewHolder(val binding: HomeItemListBinding) :
@@ -40,7 +37,7 @@ class HomeItemAdapter(private val dataset: List<Music>, val viewModel: MusicView
         holder.binding.imgViewCard.load(imgUri)
 
         holder.binding.itemCardView.setOnClickListener {
-            viewModel.setCurrentMusic(itemes)
+            viewModel.open(itemes)
             val navController = holder.itemView.findNavController()
             navController.navigate(HomeFragmentDirections.actionHomeFragmentToMusicDetailsFragment())
         }

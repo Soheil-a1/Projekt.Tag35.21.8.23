@@ -16,12 +16,10 @@ class BottomControllFragment : Fragment() {
     private lateinit var binding: FragmentBottomControllBinding
     private val viewModel: MusicViewModel by activityViewModels()
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,7 +33,6 @@ class BottomControllFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         addObserver()
-
     }
 
     fun addObserver() {
@@ -45,30 +42,24 @@ class BottomControllFragment : Fragment() {
                 MediaStatus.READY -> binding.iconPlay.visibility = View.VISIBLE
                 MediaStatus.PLAYING -> binding.iconPlay.visibility = View.VISIBLE
                 MediaStatus.FINISHED -> binding.iconPlay.visibility = View.GONE
-
             }
         })
-
-        viewModel.currentMusic.observe(viewLifecycleOwner, Observer {
+        viewModel.selctedMusic.observe(viewLifecycleOwner, Observer {
             binding.musicTitel.text = it.trackName
             binding.imgTollbar.load(it.artworkUrl100)
             binding.ProgressMusicTime.max = it.musicPreview
-            binding.musicTimeStart.setText(it.musicTimeStart)
-            binding.musicTimeEnd.setText(it.musicTimeEnd)
+            binding.musicTimeStart.text = it.musicTimeStart.toString()
+            binding.musicTimeEnd.text = it.musicTimeEnd.toString()
             binding.iconPlay.setOnClickListener {
                 viewModel.playSong()
             }
-
         })
 
         viewModel.currentMusicTime.observe(viewLifecycleOwner, Observer {
             binding.ProgressMusicTime.progress = it / 1000
             binding.musicTimeStart.text = (transform(it.toLong()))
             binding.musicTimeEnd.text = (transform(it.toLong().downTo(0).last))
-
         })
-
-
     }
 
     private fun transform(milSek: Long): String {

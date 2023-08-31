@@ -21,11 +21,9 @@ import kotlinx.coroutines.launch
 class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
     private val viewModel: MusicViewModel by activityViewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
-
     }
 
     override fun onCreateView(
@@ -35,28 +33,18 @@ class HomeFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
-
-
-
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         viewModel.getGenre()
         addObserver()
-
     }
-    private fun addObserver(){
+
+    private fun addObserver() {
         viewModel.getMusic.observe(viewLifecycleOwner, Observer {
-
-            binding.recyclerView.adapter = HomeItemAdapter(it,viewModel)
-            //viewModel.imgList.load(it.artworkUrl100)
+            binding.recyclerView.adapter = HomeItemAdapter(it, viewModel)
         })
-
-
-
     }
 }
 

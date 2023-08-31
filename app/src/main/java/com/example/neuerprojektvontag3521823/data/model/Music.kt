@@ -1,26 +1,28 @@
 package com.example.neuerprojektvontag3521823.data.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.squareup.moshi.Json
 
-data class Music (
-    @Json(name = "artistName") var artistsName: String,
-    @Json(name = "trackName") var trackName: String = "",
-    @Json(name = "previewUrl" ) var previewUrl: String,
-    @Json(name = "artworkUrl100") var artworkUrl100: String,
-    @Json(name = "trackTime") var trackTime: Int = 0,
-    @Json(name = "kind") var kind: String,
+@Entity
+data class Music(
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    @Json(name = "artistName") val artistsName: String,
+    @Json(name = "trackName") val trackName: String = "",
+    @Json(name = "previewUrl") val previewUrl: String,
+    @Json(name = "artworkUrl100") val artworkUrl100: String,
+    @Json(name = "trackTime") val trackTime: Int = 0,
+    @Json(name = "kind") val kind: String,
 
-){
-    val trackTimeSecond : Double = (trackTime / 1000).toDouble()
+    ) {
+    var trackTimeSecond: Double = (trackTime / 1000).toDouble()
     var liked: Boolean = false
-    val forward10S: Int = 0
-    val replay10S: Int= 0
-    val musicPreview = 30
-    val musicTimeStart: Int = 0
+    var forward10S: Int = 0
+    var replay10S: Int = 0
+    var musicPreview = 30
+    var musicTimeStart: Int = 0
 
-    val musicTimeEnd: Int = 0
-
-
+    var musicTimeEnd: Int = 0
 
 
 }

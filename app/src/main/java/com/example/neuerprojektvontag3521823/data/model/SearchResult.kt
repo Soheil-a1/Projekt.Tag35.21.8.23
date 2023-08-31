@@ -1,5 +1,5 @@
 package com.example.neuerprojektvontag3521823.data.model
 
-class SearchResult (
+class SearchResult(
     val results: List<Music>
 )

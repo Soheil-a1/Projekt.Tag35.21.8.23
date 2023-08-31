@@ -12,7 +12,10 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import coil.load
 import coil.transform.RoundedCornersTransformation
+import com.example.neuerprojektvontag3521823.MainActivity
+import com.example.neuerprojektvontag3521823.R
 import com.example.neuerprojektvontag3521823.databinding.FragmentMusicDetailsBinding
+import java.util.concurrent.TimeUnit
 
 
 class MusicDetailsFragment : Fragment() {
@@ -32,34 +35,23 @@ class MusicDetailsFragment : Fragment() {
         return binding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        (activity as MainActivity).hideBottomControll()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        (activity as MainActivity).showBottomControll()
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        viewModel.music.observe(viewLifecycleOwner, Observer {
-            val imgUri = it.artworkUrl100.toUri().buildUpon().scheme("https").build()
-
-            binding.tvTrackNameDetails.text = it.trackName
-            binding.tvArtistNameDetails.text = it.artistsName
-            binding.musicTimeEnd.setText(it.trackTime.toString())
-            binding.musicTimeStart.setText(it.trackTimeSecond.toString())
-            binding.ProgressMusicTime.setProgress(it.trackTimeSecond.toInt())
-            binding.iconForward10sDetails
-
-            binding.imgMusicDetails.load(imgUri) {
-                transformations(
-                    RoundedCornersTransformation(10f)
-                )
-            }
-        })
-
+        addObserver()
         if (viewModel.music.value?.liked == true) {
-            binding.btnLike.setImageResource(com.example.neuerprojektvontag3521823.R.drawable.icon_liked)
-            viewModel.saveMusic()
-
+            binding.btnLike.setImageResource(R.drawable.icon_liked)
         } else {
-            binding.btnLike.setImageResource(com.example.neuerprojektvontag3521823.R.drawable.icon_like)
-            viewModel.removeMusic()
+            binding.btnLike.setImageResource(R.drawable.icon_like)
         }
 
         binding.iconReplay10sDetails.setOnClickListener {
@@ -78,16 +70,12 @@ class MusicDetailsFragment : Fragment() {
             viewModel.onToggleMusicLike()
             Log.e("Disliked", "${viewModel.music.value?.liked}")
             if (viewModel.music.value?.liked == true) {
-                binding.btnLike.setImageResource(com.example.neuerprojektvontag3521823.R.drawable.icon_liked)
+                binding.btnLike.setImageResource(R.drawable.icon_liked)
                 viewModel.saveMusic()
             } else {
-                binding.btnLike.setImageResource(com.example.neuerprojektvontag3521823.R.drawable.icon_like)
+                binding.btnLike.setImageResource(R.drawable.icon_like)
                 viewModel.removeMusic()
             }
-        }
-
-        binding.iconPlayDetails.setOnClickListener {
-            musicPlay()
         }
 
         binding.imgButtonBack.setOnClickListener {
@@ -104,24 +92,38 @@ class MusicDetailsFragment : Fragment() {
         }
     }
 
-
-    fun musicPlay() {
-
-
-            if (binding.iconPlayDetails.tag == "Pause") {
-                binding.iconPlayDetails.setImageResource(com.example.neuerprojektvontag3521823.R.drawable.icon_play)
-                binding.iconPlayDetails.tag = "Start"
-                viewModel.playSong()
-
-            } else {
-                binding.iconPlayDetails.setImageResource(com.example.neuerprojektvontag3521823.R.drawable.icon_pause)
-                binding.iconPlayDetails.tag = "Pause"
-
+    fun addObserver() {
+        viewModel.music.observe(viewLifecycleOwner, Observer {
+            val imgUri = it.artworkUrl100.toUri().buildUpon().scheme("https").build()
+            Log.d("obServer", "Error : $it $viewModel")
+            binding.tvTrackNameDetails.text = it.trackName
+            binding.tvArtistNameDetails.text = it.artistsName
+            binding.musicTimeEnd.text = it.trackTime.toString()
+            binding.musicTimeStart.text = it.trackTimeSecond.toString()
+            binding.ProgressMusicTime.max = it.musicPreview
+            binding.imgMusicDetails.load(it.artworkUrl100)
+            binding.iconPlayDetails.setOnClickListener {
+                if (viewModel.mediaPlayer.isPlaying) {
+                    viewModel.breakMusic()
+                    binding.iconPlayDetails.setImageResource(R.drawable.icon_play)
+                } else {
+                    viewModel.playSong()
+                    binding.iconPlayDetails.setImageResource(R.drawable.icon_pause)
+                }
             }
-
+        })
+        viewModel.currentMusicTime.observe(viewLifecycleOwner, Observer {
+            binding.ProgressMusicTime.progress = it / 1000
+            binding.musicTimeStart.text = (transform(it.toLong()))
+            binding.musicTimeEnd.text = (transform(it.toLong().downTo(0).last))
+        })
     }
 
-
+    private fun transform(milSek: Long): String {
+        val min = TimeUnit.MILLISECONDS.toMinutes(milSek)
+        val sec = TimeUnit.MILLISECONDS.toSeconds(milSek) % 60
+        return String.format("%02d:%02d", min, sec)
+    }
 }
 
 
