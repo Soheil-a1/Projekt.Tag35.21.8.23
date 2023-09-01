@@ -14,9 +14,11 @@ import kotlinx.coroutines.launch
 import android.media.MediaPlayer
 import android.media.MediaPlayer.OnPreparedListener
 import androidx.lifecycle.AndroidViewModel
+import com.example.neuerprojektvontag3521823.MainActivity
 import com.example.neuerprojektvontag3521823.data.logal.MusicDataBase.Companion.getDataBase
+import java.util.concurrent.TimeUnit
 
-enum class MediaStatus { LOADING, READY, PLAYING, FINISHED }
+enum class MediaStatus { LOADING, READY, PLAYING, FINISHED, PAUSED }
 
 class MusicViewModel(application: Application) : AndroidViewModel(application) {
     private val TAG = "MusicViewModel"
@@ -38,26 +40,33 @@ class MusicViewModel(application: Application) : AndroidViewModel(application) {
     val selctedMusic: LiveData<Music>
         get() = _selectedMusic
 
+    // ein Methode mit LiveData-List von Musik aus Repository.
     val searchResults = repository.results
-    private val _genre = MutableLiveData("")
-    val genre: LiveData<String> get() = _genre
 
+    //ein Methode LiveData für Musik arten.
+    private val _genre = MutableLiveData("")
+    val genre: LiveData<String>
+        get() = _genre
+
+    // verändbare LiveData von MediaStatus
     private val _playerStatus = MutableLiveData<MediaStatus>()
     val playerStatus: LiveData<MediaStatus>
         get() = _playerStatus
 
-
+    //Hier wrid Musik laufzeit in echtzeit ausgegeben für ProgressBar.
     private val _currentMusicTime = MutableLiveData<Int>()
     val currentMusicTime: LiveData<Int>
         get() = _currentMusicTime
 
+    //hier wird ein Methode mit Musik Livedata-List aus Repository aufgerufen.
     val getMusic = repository.getMusic
 
+    //ein verändbare Methode mit LiveData_List von Musik
     private val _imgList = MutableLiveData<List<Music>>()
     val imgList: LiveData<List<Music>>
         get() = _imgList
 
-
+    // hier werden Songs geladen.
     fun loadMusik(term: String) {
         viewModelScope.launch {
             repository.getMusic(term = term)
@@ -69,11 +78,13 @@ class MusicViewModel(application: Application) : AndroidViewModel(application) {
         _music.value = music
     }
 
+
     fun open(artist: Music) {
         _music.value = artist
         Log.d("Open", "Current : ${_music.value}  $this")
     }
 
+    //Hier Wird Musik geteilt.
     fun shareMusic(context: Context) {
         val shareIntenet = Intent(Intent.ACTION_SEND)
         shareIntenet.type = "text/plain"
@@ -82,6 +93,7 @@ class MusicViewModel(application: Application) : AndroidViewModel(application) {
         context.startActivity(chooserIntent)
     }
 
+    //Für Like und dslike zuständig.
     fun onToggleMusicLike(): Boolean {
         val music = _music.value
         if (music != null) {
@@ -100,7 +112,7 @@ class MusicViewModel(application: Application) : AndroidViewModel(application) {
           return _music.value!!.liked
       }*/
 
-
+    // Die Musik wird in Library gepeichert.
     fun saveMusic() {
         _music.value?.let {
             viewModelScope.launch {
@@ -115,6 +127,7 @@ class MusicViewModel(application: Application) : AndroidViewModel(application) {
         }
     }*/
 
+    // Musik wird aus Library entfernt.
     fun removeMusic() {
         _music.value?.let {
             viewModelScope.launch {
@@ -132,7 +145,7 @@ class MusicViewModel(application: Application) : AndroidViewModel(application) {
     }
 
      */
-
+    // gibt die Akuelle Musik Art
     fun getGenre() {
         val term: String = genreMap.keys.random()
         _genre.value = term
@@ -142,7 +155,7 @@ class MusicViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-
+    //Musik arten
     private val genreMap = mapOf(
         "Country" to "6",
         "Pop" to "14",
@@ -155,13 +168,14 @@ class MusicViewModel(application: Application) : AndroidViewModel(application) {
         "Electronic" to "7",
         "Alternative" to "20"
     )
-
+    //Musik laufzeit wird akualiesiert.
     private var updateSongTime = object : Runnable {
         override fun run() {
             _currentMusicTime.value = mediaPlayer.currentPosition
             android.os.Handler().postDelayed(this, 1000)
         }
     }
+
 
     fun setupMediaPlayer() {
         mediaPlayer.setOnPreparedListener(OnPreparedListener {
@@ -175,11 +189,29 @@ class MusicViewModel(application: Application) : AndroidViewModel(application) {
             _playerStatus.value = MediaStatus.FINISHED
         }
     }
-
     fun playSong() {
+        if (_playerStatus.value == MediaStatus.PLAYING) {
+            mediaPlayer.pause()
+            _playerStatus.value = MediaStatus.PAUSED
+        } else {
+            if (_playerStatus.value == MediaStatus.PAUSED) {
+                mediaPlayer.start()
+                _playerStatus.value = MediaStatus.PLAYING
+            } else {
+                //mediaPlayer.reset()
+                _music.value = _selectedMusic.value
+                setupMediaPlayer()
+                _playerStatus.value = MediaStatus.FINISHED
+                mediaPlayer.setDataSource(_music.value?.previewUrl)
+                mediaPlayer.prepareAsync()
+            }
+        }
+    }
+
+    //Musik abspielen
+   /* fun playSong() {
         _selectedMusic.value = _music.value
         if (_playerStatus.value == MediaStatus.PLAYING) {
-            mediaPlayer.reset()
             mediaPlayer = MediaPlayer()
         }
         setupMediaPlayer()
@@ -188,16 +220,31 @@ class MusicViewModel(application: Application) : AndroidViewModel(application) {
         mediaPlayer.prepareAsync()
     }
 
-    fun playMusic() {
-        val music = _music.value
-        if (music != null) {
-            val uriString = music.artworkUrl100
-            val mediaPlayer = MediaPlayer()
-            mediaPlayer.setDataSource(uriString)
+    */
+
+    fun paused() {
+
+        if (_playerStatus.value == MediaStatus.PLAYING) {
+            mediaPlayer.pause()
+            _playerStatus.value = MediaStatus.READY
+        } else {
+            _playerStatus.value = MediaStatus.PLAYING
+            mediaPlayer.start()
         }
     }
 
+    // Musik Pausieren
     fun breakMusic() {
         mediaPlayer.pause()
     }
+
+
+    // Mit helfe von dieser Funktion die Musik laufzeit wird als Minuten und Sekunden % 60 geteilt.
+    fun transform(milSek: Long): String {
+        val min = TimeUnit.MILLISECONDS.toMinutes(milSek)
+        val sec = TimeUnit.MILLISECONDS.toSeconds(milSek) % 60
+        return String.format("%02d:%02d", min, sec)
+    }
+
+
 }

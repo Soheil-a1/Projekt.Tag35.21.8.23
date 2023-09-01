@@ -36,6 +36,7 @@ class HomeItemAdapter(private val dataset: List<Music>, val viewModel: MusicView
         holder.binding.itemCardViewText.text = itemes.trackName
         holder.binding.imgViewCard.load(imgUri)
 
+
         holder.binding.itemCardView.setOnClickListener {
             viewModel.open(itemes)
             val navController = holder.itemView.findNavController()

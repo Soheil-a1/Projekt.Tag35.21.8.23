@@ -6,11 +6,38 @@
     android:layout_height="wrap_content">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/music_ControllBar_deatils"
+        android:id="@+id/music_ControllBar"
         android:layout_width="match_parent"
         android:layout_height="110dp"
         android:background="@color/dark_grey2"
         android:visibility="visible">
+
+        <ImageButton
+            android:id="@+id/closs_icon"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/icon_close"
+            android:background="@color/dark_grey2"
+            android:scaleType="centerCrop"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+
+            />
+
+        <ImageButton
+            android:id="@+id/arrow_up"
+            android:layout_width="50dp"
+            android:layout_height="20dp"
+            android:scaleType="centerCrop"
+            android:background="@color/dark_grey2"
+            android:src="@drawable/arrow_up"
+            android:layout_marginTop="5dp"
+            app:layout_constraintEnd_toEndOf="@id/closs_icon"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+
+
+            />
 
         <TextView
             android:id="@+id/music_time_start"
@@ -18,21 +45,21 @@
             android:layout_height="wrap_content"
             android:textColor="@color/white"
             app:layout_constraintEnd_toStartOf="@id/Progress_musicTime"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/img_tollbar"
+            app:layout_constraintBottom_toBottomOf="parent"
             tools:text="4:00" />
 
         <ProgressBar
             android:id="@+id/Progress_musicTime"
             style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="300dp"
+            android:layout_width="200dp"
             android:layout_height="3dp"
-            android:layout_marginTop="9dp"
             android:progressDrawable="@drawable/cutom_progress"
             android:visibility="visible"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_marginBottom="10dp"
+            app:layout_constraintEnd_toEndOf="@id/music_time_end"
+            app:layout_constraintStart_toEndOf="@id/img_tollbar"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
         <TextView
             android:id="@+id/music_time_end"
@@ -41,20 +68,20 @@
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/Progress_musicTime"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             tools:text="5:00" />
 
 
         <ImageView
             android:id="@+id/img_tollbar"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:layout_marginStart="10dp"
             android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/music_time_start"
-            tools:src="@drawable/bild" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@drawable/bild" />
 
         <TextView
             android:id="@+id/music_titel"
@@ -63,9 +90,9 @@
             android:layout_marginTop="20dp"
             android:paddingStart="10dp"
             android:textColor="@color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/Progress_musicTime"
             app:layout_constraintStart_toEndOf="@id/img_tollbar"
-            app:layout_constraintTop_toBottomOf="@id/Progress_musicTime"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="Music Titel" />
 
         <ImageButton
@@ -78,7 +105,7 @@
             android:src="@drawable/icon_skip_previous_24"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/music_titel"
-            app:layout_constraintTop_toBottomOf="@id/Progress_musicTime" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
             android:id="@+id/icon_play"
@@ -90,7 +117,7 @@
             android:src="@drawable/icon_play"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/icon_skip_previus"
-            app:layout_constraintTop_toBottomOf="@id/Progress_musicTime" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
             android:id="@+id/icon_next"
@@ -102,7 +129,7 @@
             android:src="@drawable/icon_skip_next_24"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/icon_play"
-            app:layout_constraintTop_toBottomOf="@id/Progress_musicTime" />
+            app:layout_constraintTop_toTopOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

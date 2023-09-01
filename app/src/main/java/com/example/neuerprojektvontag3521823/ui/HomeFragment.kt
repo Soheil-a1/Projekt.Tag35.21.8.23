@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.SnapHelper
+import com.example.neuerprojektvontag3521823.MainActivity
 import com.example.neuerprojektvontag3521823.adapter.HomeItemAdapter
 import com.example.neuerprojektvontag3521823.adapter.MusicSearchAdapter
 import com.example.neuerprojektvontag3521823.data.Repository
@@ -35,16 +36,26 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        // die getGenre aus MusikViewModel und Observer funktion aufgererufen.
         viewModel.getGenre()
         addObserver()
     }
 
+
     private fun addObserver() {
+        //Hier wird ein LiveData Methode aus MusikViewModel aufgerufen, um eine List von Musik zu bekommen,
+        //und in rv anzeigen zu lassen.
         viewModel.getMusic.observe(viewLifecycleOwner, Observer {
             binding.recyclerView.adapter = HomeItemAdapter(it, viewModel)
         })
     }
+
+
+
+
+
 }
 

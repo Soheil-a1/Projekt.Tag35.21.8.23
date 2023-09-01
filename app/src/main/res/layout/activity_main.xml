@@ -19,6 +19,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/navigation_menu" />
 
+
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentContainerView"
         android:name="androidx.navigation.fragment.NavHostFragment"
@@ -37,9 +38,11 @@
         android:id="@+id/bottomMusicPlayer"
         android:name="com.example.neuerprojektvontag3521823.ui.BottomControllFragment"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@id/bottom_nav_bar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

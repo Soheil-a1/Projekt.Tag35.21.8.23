@@ -34,63 +34,16 @@ class LibraryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        //addObserver funktion wird aufgerufen.
         addObserver()
-
-        /*
-                val recView = binding.recyclerView
-
-                recView.adapter = LibraryItemAdapter(viewModel.listOfMusic)
-
-                viewModel.music.value.let {
-                    recView.adapter
-
-                }*/
     }
 
     private fun addObserver() {
+        //Hier aktualisiert die Funktion den RecyclerView-Adapter mit den neuen Daten aus der librarySongs-LiveData-Variable,
+        //wenn sich diese ändern.
         viewModel.librarySongs.observe(viewLifecycleOwner, Observer {
             binding.recyclerView.adapter = LibraryItemAdapter(it, viewModel)
+
         })
     }
 }
-
-
-/*
-class LibraryFragment : Fragment() {
-    private lateinit var binding: FragmentLibraryBinding
-    private val viewModel: MusicViewModel by activityViewModels()
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-
-        super.onCreate(savedInstanceState)
-
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        binding = FragmentLibraryBinding.inflate(inflater, container, false)
-        return binding.root
-
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-
-        val recView = binding.recyclerView
-
-        recView.adapter = LibraryItemAdapter(viewModel.listOfMusic)
-
-        viewModel.music.value.let {
-            recView.adapter
-
-        }
-    }
-
-
-}
-*/

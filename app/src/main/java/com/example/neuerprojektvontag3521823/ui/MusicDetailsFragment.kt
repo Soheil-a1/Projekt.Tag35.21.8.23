@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -35,15 +34,6 @@ class MusicDetailsFragment : Fragment() {
         return binding.root
     }
 
-    override fun onResume() {
-        super.onResume()
-        (activity as MainActivity).hideBottomControll()
-    }
-
-    override fun onStop() {
-        super.onStop()
-        (activity as MainActivity).showBottomControll()
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -94,28 +84,37 @@ class MusicDetailsFragment : Fragment() {
 
     fun addObserver() {
         viewModel.music.observe(viewLifecycleOwner, Observer {
-            val imgUri = it.artworkUrl100.toUri().buildUpon().scheme("https").build()
+            // val imgUri = it.artworkUrl100.toUri().buildUpon().scheme("https").build()
             Log.d("obServer", "Error : $it $viewModel")
-            binding.tvTrackNameDetails.text = it.trackName
-            binding.tvArtistNameDetails.text = it.artistsName
-            binding.musicTimeEnd.text = it.trackTime.toString()
-            binding.musicTimeStart.text = it.trackTimeSecond.toString()
-            binding.ProgressMusicTime.max = it.musicPreview
-            binding.imgMusicDetails.load(it.artworkUrl100)
-            binding.iconPlayDetails.setOnClickListener {
-                if (viewModel.mediaPlayer.isPlaying) {
-                    viewModel.breakMusic()
-                    binding.iconPlayDetails.setImageResource(R.drawable.icon_play)
-                } else {
-                    viewModel.playSong()
-                    binding.iconPlayDetails.setImageResource(R.drawable.icon_pause)
+            if (it != null) {
+                binding.tvTrackNameDetails.text = it.trackName
+                binding.tvArtistNameDetails.text = it.artistsName
+                binding.musicTimeEnd.text = it.trackTime.toString()
+                binding.musicTimeStart.text = it.trackTimeSecond.toString()
+                binding.ProgressMusicTime.max = it.musicPreview
+                binding.imgMusicDetails.load(it.artworkUrl100) {
+                    error(R.drawable.broken_image)
+                    transformations(
+                        RoundedCornersTransformation(10f)
+                    )
                 }
+               binding.iconPlayDetails.setOnClickListener {
+                 if (viewModel.mediaPlayer.isPlaying) {
+                     viewModel.breakMusic()
+                binding.iconPlayDetails.setImageResource(R.drawable.icon_play)
+                   } else {
+                 viewModel.playSong()
+                binding.iconPlayDetails.setImageResource(R.drawable.icon_pause)
             }
-        })
+
+        }
+
         viewModel.currentMusicTime.observe(viewLifecycleOwner, Observer {
             binding.ProgressMusicTime.progress = it / 1000
-            binding.musicTimeStart.text = (transform(it.toLong()))
-            binding.musicTimeEnd.text = (transform(it.toLong().downTo(0).last))
+            binding.musicTimeStart.text = (viewModel.transform(it.toLong()))
+            binding.musicTimeEnd.text = (viewModel.transform(it.toLong().downTo(0).last))
+        })
+            }
         })
     }
 
@@ -123,6 +122,16 @@ class MusicDetailsFragment : Fragment() {
         val min = TimeUnit.MILLISECONDS.toMinutes(milSek)
         val sec = TimeUnit.MILLISECONDS.toSeconds(milSek) % 60
         return String.format("%02d:%02d", min, sec)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        (activity as MainActivity).showBottomControll()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        (activity as MainActivity).hideBottomCotroll()
     }
 }
 
