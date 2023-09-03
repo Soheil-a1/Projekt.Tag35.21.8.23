@@ -38,7 +38,7 @@
             />
 
 
-            />
+
 
         <TextView
             android:id="@+id/item_cardView_text"
@@ -49,7 +49,7 @@
             android:textColor="?colorOnPrimary"
             android:textSize="10sp"
             android:textStyle="normal"
-            app:layout_constraintTop_toBottomOf="@id/img_item_viewCard"
+            app:layout_constraintTop_toBottomOf="@+id/img_viewCard"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"

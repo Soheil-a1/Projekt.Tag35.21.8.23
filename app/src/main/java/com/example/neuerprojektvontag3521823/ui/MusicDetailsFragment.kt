@@ -38,20 +38,34 @@ class MusicDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         addObserver()
-        if (viewModel.music.value?.liked == true) {
+       if (viewModel.music.value?.liked == true) {
             binding.btnLike.setImageResource(R.drawable.icon_liked)
         } else {
             binding.btnLike.setImageResource(R.drawable.icon_like)
         }
 
+
+
+        binding.iconPlayDetails.setOnClickListener {
+
+                if (viewModel.mediaPlayer.isPlaying){
+                    viewModel.pause()
+                    binding.iconPlayDetails.setImageResource(R.drawable.icon_play)
+                } else {
+                    viewModel.playSong()
+                    binding.iconPlayDetails.setImageResource(R.drawable.icon_pause)
+                }
+            }
+
+        //Springt 10 Sekunden zurück
         binding.iconReplay10sDetails.setOnClickListener {
-            // musicInstance.trackTimeSecond.minus(10)
+            viewModel.seekBackward()
         }
-
+        //Springt 10 Sekunden vor
         binding.iconForward10sDetails.setOnClickListener {
-            //  musicInstance.trackTimeSecond.plus(10)
+            viewModel.seekForward()
         }
-
+        //musik teilen
         binding.btnShare.setOnClickListener {
             viewModel.shareMusic(requireContext())
         }
@@ -68,11 +82,13 @@ class MusicDetailsFragment : Fragment() {
             }
         }
 
+        //zurück zum Home Navigieren
         binding.imgButtonBack.setOnClickListener {
             val navController = findNavController()
             navController.navigateUp()
         }
 
+        // Ton hohe und Nidrieg machen, leider es ist nur ui.
         binding.btnVolume.setOnClickListener {
             if (binding.ProgressVolume.visibility == View.GONE) {
                 binding.ProgressVolume.visibility = View.VISIBLE
@@ -85,8 +101,7 @@ class MusicDetailsFragment : Fragment() {
     fun addObserver() {
         viewModel.music.observe(viewLifecycleOwner, Observer {
             // val imgUri = it.artworkUrl100.toUri().buildUpon().scheme("https").build()
-            Log.d("obServer", "Error : $it $viewModel")
-            if (it != null) {
+
                 binding.tvTrackNameDetails.text = it.trackName
                 binding.tvArtistNameDetails.text = it.artistsName
                 binding.musicTimeEnd.text = it.trackTime.toString()
@@ -97,42 +112,17 @@ class MusicDetailsFragment : Fragment() {
                     transformations(
                         RoundedCornersTransformation(10f)
                     )
-                }
-               binding.iconPlayDetails.setOnClickListener {
-                 if (viewModel.mediaPlayer.isPlaying) {
-                     viewModel.breakMusic()
-                binding.iconPlayDetails.setImageResource(R.drawable.icon_play)
-                   } else {
-                 viewModel.playSong()
-                binding.iconPlayDetails.setImageResource(R.drawable.icon_pause)
             }
-
-        }
+        })
 
         viewModel.currentMusicTime.observe(viewLifecycleOwner, Observer {
-            binding.ProgressMusicTime.progress = it / 1000
+            binding.ProgressMusicTime.progress = it/1000
             binding.musicTimeStart.text = (viewModel.transform(it.toLong()))
             binding.musicTimeEnd.text = (viewModel.transform(it.toLong().downTo(0).last))
         })
-            }
-        })
+
     }
 
-    private fun transform(milSek: Long): String {
-        val min = TimeUnit.MILLISECONDS.toMinutes(milSek)
-        val sec = TimeUnit.MILLISECONDS.toSeconds(milSek) % 60
-        return String.format("%02d:%02d", min, sec)
-    }
-
-    override fun onStart() {
-        super.onStart()
-        (activity as MainActivity).showBottomControll()
-    }
-
-    override fun onStop() {
-        super.onStop()
-        (activity as MainActivity).hideBottomCotroll()
-    }
 }
 
 

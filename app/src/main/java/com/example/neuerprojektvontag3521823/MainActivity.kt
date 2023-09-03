@@ -3,19 +3,16 @@ package com.example.neuerprojektvontag3521823
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import androidx.activity.viewModels
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.neuerprojektvontag3521823.databinding.ActivityMainBinding
-import com.example.neuerprojektvontag3521823.ui.MusicViewModel
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
-    private val viewModel: MusicViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,30 +21,15 @@ class MainActivity : AppCompatActivity() {
         val navHost =
             supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
         navController = navHost.navController
+
         binding.bottomNavBar.setupWithNavController(navController)
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.bottomMusicPlayer -> binding.bottomNavBar.visibility = View.GONE
+                R.id.musicDetailsFragment -> binding.bottomNavBar.visibility = View.GONE
                 else -> binding.bottomNavBar.visibility = View.VISIBLE
             }
         }
     }
-
-    fun hideBottomCotroll() {
-     binding.bottomNavBar.visibility = View.GONE
-    }
-
-    fun showBottomControll() {
-        binding.bottomMusicPlayer.visibility = View.VISIBLE
-    }
-
-    /*override fun onSupportNavigateUp(): Boolean {
-        return navController.navigateUp() || super.onSupportNavigateUp()
-    }
-
-
-     */
-
 }
 
 

@@ -12,9 +12,6 @@
         <action
             android:id="@+id/action_homeFragment_to_musicDetailsFragment"
             app:destination="@id/musicDetailsFragment" />
-        <action
-            android:id="@+id/action_homeFragment_to_bottomControllFragment"
-            app:destination="@id/bottomControllFragment" />
 
     </fragment>
 
@@ -27,9 +24,6 @@
         <action
             android:id="@+id/action_searchFragment_to_musicDetailsFragment"
             app:destination="@id/musicDetailsFragment" />
-        <action
-            android:id="@+id/action_searchFragment_to_bottomControllFragment"
-            app:destination="@id/bottomControllFragment" />
     </fragment>
     <fragment
         android:id="@+id/libraryFragment"
@@ -39,9 +33,6 @@
         <action
             android:id="@+id/action_libraryFragment_to_musicDetailsFragment"
             app:destination="@id/musicDetailsFragment" />
-        <action
-            android:id="@+id/action_libraryFragment_to_bottomControllFragment"
-            app:destination="@id/bottomControllFragment" />
     </fragment>
     <fragment
         android:id="@+id/musicDetailsFragment"
@@ -49,14 +40,6 @@
         android:label="fragment_music_details"
         tools:layout="@layout/fragment_music_details" >
 
-    </fragment>
-    <fragment
-        android:id="@+id/bottomControllFragment"
-        android:name="com.example.neuerprojektvontag3521823.ui.BottomControllFragment"
-        android:label="BottomControllFragment" >
-        <action
-            android:id="@+id/action_bottomControllFragment_to_musicDetailsFragment"
-            app:destination="@id/musicDetailsFragment" />
     </fragment>
 </navigation>
 

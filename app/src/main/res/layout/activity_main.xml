@@ -38,7 +38,7 @@
         android:id="@+id/bottomMusicPlayer"
         android:name="com.example.neuerprojektvontag3521823.ui.BottomControllFragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@id/bottom_nav_bar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

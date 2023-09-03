@@ -14,11 +14,10 @@ import kotlinx.coroutines.launch
 import android.media.MediaPlayer
 import android.media.MediaPlayer.OnPreparedListener
 import androidx.lifecycle.AndroidViewModel
-import com.example.neuerprojektvontag3521823.MainActivity
 import com.example.neuerprojektvontag3521823.data.logal.MusicDataBase.Companion.getDataBase
 import java.util.concurrent.TimeUnit
 
-enum class MediaStatus { LOADING, READY, PLAYING, FINISHED, PAUSED }
+enum class MediaStatus { LOADING, READY, PLAYING, FINISHED}
 
 class MusicViewModel(application: Application) : AndroidViewModel(application) {
     private val TAG = "MusicViewModel"
@@ -26,7 +25,6 @@ class MusicViewModel(application: Application) : AndroidViewModel(application) {
 
     val repository = Repository(MusicApi, database)
     val musicList = repository.results
-    val listOfMusic = mutableListOf<Music>()
     var mediaPlayer: MediaPlayer = MediaPlayer()
     val librarySongs = repository.libraryMusic
 
@@ -169,7 +167,7 @@ class MusicViewModel(application: Application) : AndroidViewModel(application) {
         "Alternative" to "20"
     )
     //Musik laufzeit wird akualiesiert.
-    private var updateSongTime = object : Runnable {
+     var updateSongTime = object : Runnable {
         override fun run() {
             _currentMusicTime.value = mediaPlayer.currentPosition
             android.os.Handler().postDelayed(this, 1000)
@@ -189,55 +187,64 @@ class MusicViewModel(application: Application) : AndroidViewModel(application) {
             _playerStatus.value = MediaStatus.FINISHED
         }
     }
-    fun playSong() {
-        if (_playerStatus.value == MediaStatus.PLAYING) {
-            mediaPlayer.pause()
-            _playerStatus.value = MediaStatus.PAUSED
-        } else {
-            if (_playerStatus.value == MediaStatus.PAUSED) {
-                mediaPlayer.start()
-                _playerStatus.value = MediaStatus.PLAYING
-            } else {
-                //mediaPlayer.reset()
-                _music.value = _selectedMusic.value
-                setupMediaPlayer()
-                _playerStatus.value = MediaStatus.FINISHED
-                mediaPlayer.setDataSource(_music.value?.previewUrl)
-                mediaPlayer.prepareAsync()
-            }
-        }
+
+    /*fun playSong() {
+        mediaPlayer.reset()
+        setupMediaPlayer()
+        _playerStatus.value = MediaStatus.LOADING
+        val previewUrl = _music.value?.previewUrl
+        mediaPlayer.setDataSource(previewUrl)
+        mediaPlayer.prepareAsync()
     }
+     */
+/*
+    fun playMusik() {
+        _selectedMusic.value = _music.value
+        val previewUrl = selctedMusic.value?.previewUrl
+        if (_playerStatus.value == MediaStatus.PLAYING) {
+            mediaPlayer.reset()
+            mediaPlayer = MediaPlayer()
+        }
+         setupMediaPlayer()
+         _playerStatus.value = MediaStatus.LOADING
+         mediaPlayer.setDataSource( previewUrl)
+         mediaPlayer.prepareAsync()
+         }
+*/
+
+
 
     //Musik abspielen
-   /* fun playSong() {
+    fun playSong() {
         _selectedMusic.value = _music.value
         if (_playerStatus.value == MediaStatus.PLAYING) {
+            mediaPlayer.reset()
             mediaPlayer = MediaPlayer()
         }
         setupMediaPlayer()
         _playerStatus.value = MediaStatus.LOADING
-        mediaPlayer.setDataSource(selctedMusic.value?.previewUrl)
+        val previewUrl = selctedMusic.value?.previewUrl
+        mediaPlayer.setDataSource(previewUrl)
         mediaPlayer.prepareAsync()
     }
 
-    */
 
+/*
     fun paused() {
-
-        if (_playerStatus.value == MediaStatus.PLAYING) {
+        if (mediaPlayer.isPlaying) {
             mediaPlayer.pause()
             _playerStatus.value = MediaStatus.READY
         } else {
-            _playerStatus.value = MediaStatus.PLAYING
             mediaPlayer.start()
+            _playerStatus.value = MediaStatus.PLAYING
         }
     }
+*/
 
-    // Musik Pausieren
-    fun breakMusic() {
+
+    fun pause(){
         mediaPlayer.pause()
     }
-
 
     // Mit helfe von dieser Funktion die Musik laufzeit wird als Minuten und Sekunden % 60 geteilt.
     fun transform(milSek: Long): String {
@@ -246,5 +253,12 @@ class MusicViewModel(application: Application) : AndroidViewModel(application) {
         return String.format("%02d:%02d", min, sec)
     }
 
+    fun seekForward(){
+        mediaPlayer.seekTo(mediaPlayer.currentPosition + 10000)
+    }
+    // Springt 10 Sekunden zurück
+    fun seekBackward(){
+        mediaPlayer.seekTo(mediaPlayer.currentPosition - 10000)
+    }
 
 }

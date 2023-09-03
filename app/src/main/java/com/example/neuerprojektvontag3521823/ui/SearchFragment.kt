@@ -45,4 +45,5 @@ class SearchFragment : Fragment() {
             binding.recyclerView.adapter = MusicSearchAdapter(it, viewModel)
         })
     }
+
 }

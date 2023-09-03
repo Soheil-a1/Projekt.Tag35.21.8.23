@@ -37,14 +37,14 @@ class BottomControllFragment : Fragment() {
         //Hier wird der Observer aufgerufen.
         addObserver()
 
-        binding.iconPlay.setOnClickListener {
-            viewModel.paused()
+        // wenn iconPlay button geklickt ist, die playSong funktion wird von MusikViewModel aufgeruft.
+
+      binding.iconPlay.setOnClickListener {
+            //viewModel.paused()
+          viewModel.playSong()
         }
-       // von MediaPlayerFragment zum DetailFragment navigieren.
-        binding.musicControllBar.setOnClickListener {
-            viewModel.setCurrentMusic(viewModel.music.value!!)
-            findNavController().navigate(R.id.action_searchFragment_to_musicDetailsFragment)
-        }
+
+
 
         binding.clossIcon.setOnClickListener {
             binding.musicControllBar.visibility = View.GONE
@@ -61,37 +61,26 @@ class BottomControllFragment : Fragment() {
         viewModel.playerStatus.observe(viewLifecycleOwner, Observer {
             when (it) {
                 // Hier sagen wir, wenn Musik lädt, iconPlay soll versteckt sein.
-                MediaStatus.LOADING -> binding.iconPlay.visibility = View.GONE
-
-                MediaStatus.PAUSED -> {
-
-                }
+                MediaStatus.LOADING -> binding.musicControllBar.visibility = View.GONE
                 //wenn Musik bereit ist, soll iconPlay angezeigt werden.
-                MediaStatus.READY -> binding.iconPlay.visibility = View.VISIBLE
+                MediaStatus.READY -> binding.musicControllBar.visibility = View.VISIBLE
                 //wenn Musik amlaufen ist, soll iconPlay angezeigt werden.
-                MediaStatus.PLAYING -> binding.iconPlay.visibility = View.VISIBLE
+                MediaStatus.PLAYING -> binding.musicControllBar.visibility = View.VISIBLE
                 //und am ende soll iconPlay soll nochmal versteckt werden.
-                MediaStatus.FINISHED -> binding.iconPlay.visibility = View.GONE
+                MediaStatus.FINISHED -> binding.musicControllBar.visibility = View.GONE
             }
         })
 
 
         //Bei diesem Codeabschnitt wird ausgewählte musik für player observt.
-        viewModel.selctedMusic.observe(viewLifecycleOwner, Observer {
+        viewModel.music.observe(viewLifecycleOwner, Observer {
             // hier werden musik daten von MusikViewModel klasse geholt und mit helfer von mutter klasse
             //sortiert und in fragment_bottom_controll.xml in richtige position angezeigt.
             binding.musicTitel.text = it.trackName
             binding.imgTollbar.load(it.artworkUrl100)
-            binding.ProgressMusicTime.max = it.musicPreview
-            binding.musicTimeStart.text = it.musicTimeStart.toString()
-            binding.musicTimeEnd.text = it.musicTimeEnd.toString()
-            // wenn iconPlay button geklickt ist, die playSong funktion wird von MusikViewModel aufgeruft.
-
-                if (viewModel.mediaPlayer.isPlaying) {
-                    binding.iconPlay.setImageResource(R.drawable.icon_play)
-                } else {
-                    binding.iconPlay.setImageResource(R.drawable.icon_pause)
-                }
+            binding.ProgressMusicTime.max = it.trackTimeSecond.toInt()
+            binding.musicTimeStart.text = it.trackTimeSecond.toString()
+            binding.musicTimeEnd.text = it.trackTimeSecond.toString()
 
         })
         //wir observieren eine Eigentschaft mit Name "currentMusikTime" aus MusikViewModel,damit
